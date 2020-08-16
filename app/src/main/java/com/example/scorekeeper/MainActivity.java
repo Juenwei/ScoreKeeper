@@ -14,33 +14,53 @@ import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity {
 
+    //The one take the score value
     private int mScore1;
     private int mScore2;
 
+    // The member show the score value
     private TextView mScoreText1;
     private TextView mScoreText2;
 
+    // the Pref file key
     static final String STATE_SCORE_1 = "Team 1 Score";
     static final String STATE_SCORE_2 = "Team 2 Score";
 
+    //declare a pref variable
     private SharedPreferences ScorePreferences;
     private String sharedPrefFile = "com.example.scorekeeper";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ScorePreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+        //find the TextViewID
         mScoreText1=(TextView)findViewById(R.id.score_1);
         mScoreText2=(TextView)findViewById(R.id.score_2);
+
+            mScore1 = ScorePreferences.getInt(STATE_SCORE_1,0);
+            mScore2 = ScorePreferences.getInt(STATE_SCORE_2,0);
+
+            mScoreText1.setText(String.valueOf(mScore1));
+            mScoreText2.setText(String.valueOf(mScore2));
+
+
 
 
     }
 
+
     protected void onPause()
     {
         super.onPause();
+        //activate the editor tools
         SharedPreferences.Editor preferencesEditor = ScorePreferences.edit();
+        //Save the score
         preferencesEditor.putInt(STATE_SCORE_1, mScore1);
         preferencesEditor.putInt(STATE_SCORE_2, mScore2);
         preferencesEditor.apply();
